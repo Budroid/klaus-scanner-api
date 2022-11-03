@@ -19,10 +19,16 @@ public class CommandLineRunner {
      * @return the output of the command
      * @throws IOException if an I/O error occurs
      */
-    public static List<String> run(String... command) throws IOException
-    {
-
+    public static List<String> run(String... command) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(command).redirectErrorStream(true);
+        Process process = pb.start();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            return in.lines().collect(Collectors.toList());
+        }
+    }
+
+    public static List<String> runWithoutErrorStream(String... command) throws IOException {
+        ProcessBuilder pb = new ProcessBuilder(command).redirectErrorStream(false);
         Process process = pb.start();
         try (BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             return in.lines().collect(Collectors.toList());
@@ -47,8 +53,8 @@ public class CommandLineRunner {
         }
     }
 
-    public static void run(String command, boolean pipedCommand, boolean outputToFile) throws IOException {
-        File output = new File("/home/robert/hcxtools/hcxdumptool/klaus/klaus_output");
+    public static void runOutputToFile(String command, String path) throws IOException {
+        File output = new File(path);
         ProcessBuilder pb = new ProcessBuilder(Commands.toArray(command)).redirectOutput(output);
         Process scan = pb.start();
         try {
@@ -58,6 +64,5 @@ public class CommandLineRunner {
             logger.info("Interrupted in run, destroying process...");
             scan.destroy();
         }
-
     }
 }

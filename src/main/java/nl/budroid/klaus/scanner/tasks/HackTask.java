@@ -9,17 +9,17 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 @NoArgsConstructor
-public class ScanTask implements Runnable{
+public class HackTask implements Runnable{
 
-    private static final Logger logger = LoggerFactory.getLogger(ScanTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(HackTask.class);
 
     @Override
     public void run() {
         try {
-            CommandLineRunner.runOutputToFile(Commands.CMD_START_SCAN, "/home/robert/hcxtools/hcxdumptool/klaus/klaus_output");
+            CommandLineRunner.runOutputToFile(Commands.CMD_HCXDUMPTOOL_START, "/home/robert/hcxtools/hcxdumptool/klaus/test/output");
             logger.info("Scan finished?");
         } catch (IOException e) {
-            logger.info("IOException in run (Scantask)");
+            logger.info("IOException in run()");
             e.printStackTrace();
         }
     }
